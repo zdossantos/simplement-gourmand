@@ -14,6 +14,17 @@ jobs:
   ci:
     runs-on: ubuntu-latest
 
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: testing
+          MYSQL_USER: laravel
+          MYSQL_PASSWORD: password
+        ports:
+          - 3306:3306
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -29,16 +40,29 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-          cache: 'npm'
 
       - name: Install Node Dependencies
-        run: npm ci
+        run: npm i -g bun && bun install
 
       - name: Install Dependencies
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
       - name: Copy Environment File
         run: cp .env.example .env
+
+      - name: Create Environment File
+        run: |
+          echo "APP_NAME=Laravel" > .env
+          echo "APP_ENV=testing" >> .env
+          echo "APP_KEY=" >> .env
+          echo "APP_DEBUG=true" >> .env
+          echo "APP_URL=http://localhost" >> .env
+          echo "DB_CONNECTION=mysql" >> .env
+          echo "DB_HOST=127.0.0.1" >> .env
+          echo "DB_PORT=3306" >> .env
+          echo "DB_DATABASE=testing" >> .env
+          echo "DB_USERNAME=laravel" >> .env
+          echo "DB_PASSWORD=password" >> .env
 
       - name: Generate Application Key
         run: php artisan key:generate
@@ -47,7 +71,10 @@ jobs:
         run: php artisan ziggy:generate
 
       - name: Build Assets
-        run: npm run build
+        run: bun run build
+
+      - name: Run Database Migrations
+        run: php artisan migrate --force
 
       - name: Tests
         run: ./vendor/bin/pest

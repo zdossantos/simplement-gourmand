@@ -53,3 +53,9 @@ bun run dev
 
 - **Application** : http://localhost
 - **API** : Endpoints disponibles à partir de `/api`
+
+### 8. Lancer les tests
+
+```bash
+./vendor/bin/sail pest
+```
