@@ -14,7 +14,7 @@ class FoodController extends Controller
 {
     public function index(FoodListRequest $request): Response
     {
-        $search = $request->get('search', '');
+        $search = trim($request->get('search', ''));
         $products = [];
         $count = 0;
 

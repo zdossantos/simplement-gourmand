@@ -39,8 +39,8 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: '/dashboard',
     },
     {
-        title: 'Produits',
-        href: '/dashboard/products',
+        title: 'Aliments',
+        href: '/food',
     },
 ];
 
