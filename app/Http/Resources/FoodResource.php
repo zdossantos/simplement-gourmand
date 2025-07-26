@@ -12,14 +12,25 @@ class FoodResource extends JsonResource
      *
      * @return array<string, mixed>
      */
-    public function toArray(Request $request): array
+    public function toArray(Request $request): ?array
     {
+        $required = [
+            'id',
+            'product_name',
+        ];
+
+        foreach ($required as $key) {
+            if (empty($this->resource[$key])) {
+                return null;
+            }
+        }
+
         return [
-            'id' => $this->resource['id'] ?? null,
+            'id' => $this->resource['id'],
             'name' => $this->resource['product_name'],
-            'image_url' => $this->resource['image_url'],
-            'image_front_url' => $this->resource['image_front_url'],
-            'image_front_small_url' => $this->resource['image_front_small_url']
+            'image_url' => $this->resource['image_url'] ?? null,
+            'image_front_url' => $this->resource['image_front_url'] ?? null,
+            'image_front_small_url' => $this->resource['image_front_small_url'] ?? null,
         ];
     }
 }

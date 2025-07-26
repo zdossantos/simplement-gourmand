@@ -14,7 +14,7 @@ class FoodListRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'search' => ['required', 'string', 'min:2'],
+            'search' => ['required', 'string', 'min:1'],
             'page' => ['integer', 'min:1'],
             'page_size' => ['integer', 'min:1', 'max:100']
         ];
