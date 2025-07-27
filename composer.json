@@ -15,6 +15,7 @@
         "laravel/passport": "^13.0",
         "laravel/tinker": "^2.10.1",
         "openfoodfacts/openfoodfacts-php": "^0.3.0",
+        "spatie/laravel-data": "^4.17",
         "tightenco/ziggy": "^2.4"
     },
     "require-dev": {

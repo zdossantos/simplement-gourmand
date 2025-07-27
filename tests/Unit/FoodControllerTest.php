@@ -104,7 +104,7 @@ class FoodControllerTest extends TestCase
         $this->assertEquals('chocolate', $data['search']);
         $this->assertEquals(1, $data['count']);
         $this->assertCount(1, $data['products']);
-        $this->assertEquals('123', $data['products'][0]['id']);
-        $this->assertEquals('Dark Chocolate', $data['products'][0]['name']);
+        $this->assertEquals('123', $data['products'][0]->id);
+        $this->assertEquals('Dark Chocolate', $data['products'][0]->name);
     }
 } 

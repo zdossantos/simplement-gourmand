@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\DTOs\FoodDTO;
 use App\Facades\OpenFoodFacts;
 use App\Http\Requests\Food\FoodListRequest;
-use App\Http\Resources\FoodResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -20,10 +20,7 @@ class FoodController extends Controller
 
         if (strlen($search) >= 2) {
             $results = OpenFoodFacts::searchByText($search);
-            $products = FoodResource::collection($results['products'] ?? [])->resolve();
-            $products = array_filter($products, function($product) {
-                return $product;
-            });
+            $products = FoodDTO::fromOpenFoodFactsCollection($results['products'] ?? []);
             $count = $results['count'] ?? 0;
         }
 

@@ -11,14 +11,13 @@ import CardDescription from '@/components/ui/card/CardDescription.vue';
 import CardHeader from '@/components/ui/card/CardHeader.vue';
 import CardTitle from '@/components/ui/card/CardTitle.vue';
 import Skeleton from '@/components/ui/skeleton/Skeleton.vue';
-import { Search, Package, X } from 'lucide-vue-next';
+import { Search, Package, X, Apple } from 'lucide-vue-next';
 
 interface FoodProduct {
   id: string | null
   name: string
-  image_url?: string
-  image_front_url?: string
-  image_front_small_url?: string
+  image?: string
+  hasImage?: boolean
 }
 
 
@@ -104,13 +103,13 @@ onMounted(() => {
                         <CardContent class="p-0">
                             <div class="aspect-square bg-gray-100 flex items-center justify-center">
                                 <img
-                                    v-if="product.image_front_small_url || product.image_front_url || product.image_url"
-                                    :src="product.image_front_small_url || product.image_front_url || product.image_url"
+                                    v-if="product.hasImage"
+                                    :src="product.image"
                                     :alt="product.name"
                                     class="w-full h-full object-cover"
                                     loading="lazy"
                                 />
-                                <Package v-else class="h-12 w-12 text-gray-400" />
+                                <Apple v-else class="h-12 w-12 text-gray-400" />
                             </div>
                             <div class="p-4">
                                 <h3 class="font-medium text-sm line-clamp-2 min-h-[2.5rem]">
