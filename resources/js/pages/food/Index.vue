@@ -11,18 +11,9 @@ import CardDescription from '@/components/ui/card/CardDescription.vue';
 import CardHeader from '@/components/ui/card/CardHeader.vue';
 import CardTitle from '@/components/ui/card/CardTitle.vue';
 import Skeleton from '@/components/ui/skeleton/Skeleton.vue';
-import { Search, Package, X, Plus } from 'lucide-vue-next';
-import { Button } from '@/components/ui/button';
+import { Search, Package, X } from 'lucide-vue-next';
 import { router } from '@inertiajs/vue3';
-
-interface FoodProduct {
-  id: string | null
-  name: string
-  image?: string
-  hasImage?: boolean
-  unit?: string
-  quantity?: number
-}
+import FoodListCard, { type FoodProduct } from '@/components/food/FoodListCard.vue';
 
 
 interface ProductsPageProps extends AppPageProps {
@@ -117,29 +108,7 @@ const addFood = (product: FoodProduct) => {
                 </div>
 
                 <div v-else-if="products.length > 0" class="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                    <Card v-for="product in products" :key="product.id || product.name" class="overflow-hidden hover:shadow-md transition-shadow">
-                        <CardContent class="p-0 flex flex-col">
-                            <div class="w-full h-40 flex items-center justify-center overflow-hidden">
-                                <img
-                                    v-if="product.hasImage"
-                                    :src="product.image"
-                                    :alt="product.name"
-                                    loading="lazy"
-                                    class="w-full h-full object-contain"
-                                />
-                                <Apple v-else class="h-12 w-12 text-gray-400" />
-                            </div>
-                            <div class="p-4 flex flex-col gap-3 flex-1">
-                                <h3 class="font-medium text-sm line-clamp-2 min-h-[2.5rem]">
-                                    {{ product.name || 'Nom non disponible' }}
-                                </h3>
-                                <Button @click="addFood(product)" class="mt-auto">
-                                    <Plus class="h-4 w-4" />
-                                    Ajouter au réfrigérateur
-                                </Button>
-                            </div>
-                        </CardContent>
-                    </Card>
+                    <FoodListCard v-for="product in products" :key="product.id || product.name" :product="product" />
                 </div>
 
                 <Card v-else-if="!isLoading && search">
