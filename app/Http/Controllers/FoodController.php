@@ -21,6 +21,9 @@ class FoodController extends Controller
         if (strlen($search) >= 2) {
             $results = OpenFoodFacts::searchByText($search);
             $products = FoodDTO::fromOpenFoodFactsCollection($results['products'] ?? []);
+            
+            $userFood = auth()->user()->food;
+            
             $count = $results['count'] ?? 0;
         }
 

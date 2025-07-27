@@ -3,6 +3,7 @@
 namespace App\DTOs;
 
 use Spatie\LaravelData\Data;
+use Spatie\LaravelData\Attributes\MapName;
 
 class FoodDTO extends Data
 {
@@ -12,8 +13,10 @@ class FoodDTO extends Data
         public ?string $code,
         public ?string $brands,
         public ?string $nutriscore_grade,
-        public array $images,
+        public ?string $image,
         public bool $hasImage,
+        public ?float $quantity = null,
+        public ?string $unit = null,
     ) {}
 
     public static function fromArray(array $product): ?self
@@ -23,13 +26,8 @@ class FoodDTO extends Data
             return null;
         }
 
-        $images = [
-            'url' => !empty($product['image_url']) ? $product['image_url'] : null,
-            'front_url' => !empty($product['image_front_url']) ? $product['image_front_url'] : null,
-            'front_small_url' => !empty($product['image_front_small_url']) ? $product['image_front_small_url'] : null,
-        ];
-
-        $hasImage = !empty($images['url']) || !empty($images['front_url']) || !empty($images['front_small_url']);
+        $image = $product['image_front_url'] ?? $product['image_front_small_url'] ?? $product['image_url'] ?? null;
+        $hasImage = !empty($image);
 
         return new self(
             id: !empty($product['id']) ? (string)$product['id'] : null,
@@ -37,8 +35,10 @@ class FoodDTO extends Data
             code: !empty($product['code']) ? (string)$product['code'] : null,
             brands: !empty($product['brands']) ? trim($product['brands']) : null,
             nutriscore_grade: !empty($product['nutriscore_grade']) ? strtoupper($product['nutriscore_grade']) : null,
-            images: $images,
+            image: $image,
             hasImage: $hasImage,
+            quantity: isset($product['product_quantity']) ? (float)$product['product_quantity'] : null,
+            unit: !empty($product['product_quantity_unit']) ? trim($product['product_quantity_unit']) : null,
         );
     }
 
@@ -56,35 +56,17 @@ class FoodDTO extends Data
         return $validProducts;
     }
 
-    public function getBestImage(): ?string
+    /**
+     * Prépare les données pour l'ajout au frigo
+     */
+    public function toFridgeArray(): array
     {
-        return $this->images['front_url'] ?? $this->images['front_small_url'] ?? $this->images['url'];
-    }
-
-    public function toArray(): array
-    {
-        $data = [
-            'id' => $this->id,
+        return [
+            'openfoodfacts_id' => $this->code ?? $this->id,
             'name' => $this->name,
-            'hasImage' => $this->hasImage,
+            'image_url' => $this->image,
+            'quantity' => $this->quantity,
+            'unit' => $this->unit,
         ];
-
-        if ($this->hasImage) {
-            $data['image'] = $this->getBestImage();
-        }
-
-        return $data;
-    }
-
-    public function toArrayWithDetails(): array
-    {
-        $data = $this->toArray();
-        
-        $data['code'] = $this->code;
-        $data['brands'] = $this->brands;
-        $data['nutriscore_grade'] = $this->nutriscore_grade;
-        $data['images'] = $this->images;
-
-        return $data;
     }
 } 
