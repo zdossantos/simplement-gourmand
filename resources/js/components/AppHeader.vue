@@ -59,12 +59,21 @@ const mainNavItems: NavItem[] = [
         href: '',
         icon: Refrigerator,
     },
+];
+
+const rightNavItems: NavItem[] = [
     {
+        title: 'Repository',
+        href: 'https://github.com/laravel/vue-starter-kit',
+        icon: Folder,
         title: 'Recettes',
         href: '',
         icon: CookingPot,
     },
     {
+        title: 'Documentation',
+        href: 'https://laravel.com/docs/starter-kits#vue',
+        icon: BookOpen,
         title: 'Blog',
         href: '',
         icon: Newspaper,
