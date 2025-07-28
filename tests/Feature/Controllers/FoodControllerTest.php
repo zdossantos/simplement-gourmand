@@ -1,22 +1,27 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Feature;
 
-use App\Facades\OpenFoodFacts;
 use App\Http\Controllers\FoodController;
 use App\Http\Requests\Food\FoodListRequest;
-use Illuminate\Http\Request;
+use App\Services\FoodSearchService;
 use Mockery;
 use Tests\TestCase;
+use App\Models\User;
 
 class FoodControllerTest extends TestCase
 {
     protected FoodController $controller;
+    protected $foodSearchService;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->controller = new FoodController();
+        $user = User::factory()->create();
+        $this->actingAs($user);
+        
+        $this->foodSearchService = Mockery::mock(FoodSearchService::class);
+        $this->controller = new FoodController($this->foodSearchService);
     }
 
     protected function tearDown(): void
@@ -40,11 +45,11 @@ class FoodControllerTest extends TestCase
         $request = new FoodListRequest();
         $request->merge(['search' => 'pizza']);
 
-        OpenFoodFacts::shouldReceive('searchByText')
-            ->with('pizza')
+        $this->foodSearchService->shouldReceive('searchWithFridgeStatus')
+            ->with(auth()->user(), 'pizza')
             ->andReturn([
-                'products' => [
-                    ['id' => '123', 'product_name' => 'Pizza']
+                'foods' => [
+                    (object)['openfoodfacts_id' => '123', 'name' => 'Pizza']
                 ],
                 'count' => 1
             ]);
@@ -59,14 +64,22 @@ class FoodControllerTest extends TestCase
         $request = new FoodListRequest();
         $request->merge(['search' => 'pizza']);
 
-        OpenFoodFacts::shouldReceive('searchByText')
-            ->with('pizza')
-            ->andThrow(new \Exception('API Error'));
+        $this->foodSearchService->shouldReceive('searchWithFridgeStatus')
+            ->with(auth()->user(), 'pizza')
+            ->andThrow(new \Exception('Service Error'));
 
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('API Error');
+        $response = $this->controller->index($request);
 
-        $this->controller->index($request);
+        // The controller catches exceptions and sets an error message
+        $this->assertNotNull($response);
+        
+        $reflection = new \ReflectionClass($response);
+        $propsProperty = $reflection->getProperty('props');
+        $propsProperty->setAccessible(true);
+        $data = $propsProperty->getValue($response);
+        
+        $this->assertArrayHasKey('error', $data);
+        $this->assertNotNull($data['error']);
     }
 
     public function test_index_returns_products_in_correct_format()
@@ -74,18 +87,16 @@ class FoodControllerTest extends TestCase
         $request = new FoodListRequest();
         $request->merge(['search' => 'chocolate']);
 
-        OpenFoodFacts::shouldReceive('searchByText')
-            ->with('chocolate')
+        $mockProduct = (object)[
+            'openfoodfacts_id' => '123',
+            'name' => 'Dark Chocolate',
+            'image_url' => 'http://example.com/chocolate.jpg',
+        ];
+
+        $this->foodSearchService->shouldReceive('searchWithFridgeStatus')
+            ->with(auth()->user(), 'chocolate')
             ->andReturn([
-                'products' => [
-                    [
-                        'id' => '123',
-                        'product_name' => 'Dark Chocolate',
-                        'image_url' => 'http://example.com/chocolate.jpg',
-                        'image_front_url' => 'http://example.com/chocolate-front.jpg',
-                        'image_front_small_url' => 'http://example.com/chocolate-small.jpg',
-                    ]
-                ],
+                'foods' => [$mockProduct],
                 'count' => 1
             ]);
 
@@ -98,13 +109,13 @@ class FoodControllerTest extends TestCase
         $propsProperty->setAccessible(true);
         $data = $propsProperty->getValue($response);
         
-        $this->assertArrayHasKey('products', $data);
+        $this->assertArrayHasKey('foods', $data);
         $this->assertArrayHasKey('search', $data);
         $this->assertArrayHasKey('count', $data);
         $this->assertEquals('chocolate', $data['search']);
         $this->assertEquals(1, $data['count']);
-        $this->assertCount(1, $data['products']);
-        $this->assertEquals('123', $data['products'][0]->id);
-        $this->assertEquals('Dark Chocolate', $data['products'][0]->name);
+        $this->assertCount(1, $data['foods']);
+        $this->assertEquals('123', $data['foods'][0]->openfoodfacts_id);
+        $this->assertEquals('Dark Chocolate', $data['foods'][0]->name);
     }
 } 

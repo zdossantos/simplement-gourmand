@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Food extends Model
+class FridgeFood extends Model
 {
-    protected $table = 'food';
+    use HasFactory;
+    protected $table = 'fridge_food';
 
     protected $fillable = [
         'user_id',
@@ -15,7 +17,12 @@ class Food extends Model
         'name',
         'quantity',
         'unit',
-        'image_url',
+        'image',
+    ];
+
+    protected $casts = [
+        'quantity' => 'decimal:2',
+        'user_id' => 'integer',
     ];
 
     public function user(): BelongsTo

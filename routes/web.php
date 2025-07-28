@@ -16,6 +16,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/food', [FoodController::class, 'index'])->name('food.index');
     Route::get('/fridge', [FridgeController::class, 'index'])->name('fridge.index');
     Route::post('/fridge/addFood', [FridgeController::class, 'addFood'])->name('fridge.addFood');
+    Route::put('/fridge/updateFood/{id}', [FridgeController::class, 'updateFood'])->name('fridge.updateFood');
+    Route::delete('/fridge/deleteFood/{id}', [FridgeController::class, 'deleteFood'])->name('fridge.deleteFood');
 });
 
 
