@@ -59,10 +59,9 @@ const handleInput = (event: Event) => {
 			@input="handleInput"
 		/>
 		<div 
-			v-if="props.unit" 
 			class="flex items-center px-2 py-2 bg-muted text-muted-foreground text-sm font-medium border-l border-input"
 		>
-			{{ props.unit }}
+			{{ props.unit ?? 'pièce' }} 
 		</div>
 	</div>
 </template>

@@ -12,18 +12,18 @@ import CardHeader from '@/components/ui/card/CardHeader.vue';
 import CardTitle from '@/components/ui/card/CardTitle.vue';
 import Skeleton from '@/components/ui/skeleton/Skeleton.vue';
 import { Search, Package, X } from 'lucide-vue-next';
-import { router } from '@inertiajs/vue3';
-import FoodListCard, { type FoodProduct } from '@/components/food/FoodListCard.vue';
+import FoodCard from '@/components/food/FoodCard.vue';
+import type { Food } from '@/types/food';
 
-
-interface ProductsPageProps extends AppPageProps {
-  products: FoodProduct[]
+interface FoodSearchPageProps extends AppPageProps {
+  foods: Food[]
   search: string
   count: number
+  error?: string
 }
 
-const page = usePage<ProductsPageProps>()
-const products = computed(() => page.props.products || [])
+const page = usePage<FoodSearchPageProps>()
+const foods = computed(() => page.props.foods || [])
 const search = computed(() => page.props.search || '')
 const count = computed(() => page.props.count || 0)
 
@@ -43,20 +43,6 @@ const { searchQuery, isLoading, clearSearch } = useFoodSearchWeb()
 onMounted(() => {
   searchQuery.value = search.value
 })
-
-const addFood = (product: FoodProduct) => {
-  router.post(route('fridge.addFood'), {
-    openfoodfacts_id: product.id,
-    name: product.name,
-    image_url: product.image,
-    unit: product.unit,
-    quantity: product.quantity,
-  }, {
-    preserveState: true,
-    preserveScroll: true,
-    only: []
-  })
-}
 </script>
 
 <template>
@@ -107,8 +93,8 @@ const addFood = (product: FoodProduct) => {
                     </Card>
                 </div>
 
-                <div v-else-if="products.length > 0" class="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                    <FoodListCard v-for="product in products" :key="product.id || product.name" :product="product" />
+                <div v-else-if="foods.length > 0" class="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                    <FoodCard v-for="food in foods" :key="food.openfoodfacts_id || food.name" :food="food" />
                 </div>
 
                 <Card v-else-if="!isLoading && search">

@@ -9,7 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\Contracts\OAuthenticatable;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use App\Models\Food;
+use App\Models\FridgeFood;
 
 class User extends Authenticatable implements OAuthenticatable
 {
@@ -50,8 +50,8 @@ class User extends Authenticatable implements OAuthenticatable
         ];
     }
 
-    public function food(): HasMany
+    public function fridgeFood(): HasMany
     {
-        return $this->hasMany(Food::class);
+        return $this->hasMany(FridgeFood::class);
     }
 }
