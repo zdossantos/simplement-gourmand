@@ -1,12 +1,18 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\FoodController;
 
 Route::get('/', function () {
-    return Inertia::render('Welcome');
+    if (auth()->check()) {
+        return redirect()->route('dashboard');
+    }
+    return redirect()->route('login');
 })->name('home');
+
+
 
 Route::get('dashboard', function () {
     return Inertia::render('Dashboard');
@@ -14,6 +20,11 @@ Route::get('dashboard', function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/food', [FoodController::class, 'index'])->name('food.index');
+
+    Route::middleware(['auth', 'verified'])->prefix('auth')->name('auth.')->group(function () {
+        Route::get('/profile', [AuthController::class, 'profile'])->name('profile');
+    });
+
 });
 
 require __DIR__.'/settings.php';

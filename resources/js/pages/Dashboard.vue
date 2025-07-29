@@ -24,11 +24,11 @@ const demoStore = useDemoCounterStore()
             <div class="grid auto-rows-min gap-4 md:grid-cols-3">
                 <div class="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border flex items-center justify-center">
                     <div class="inline-flex gap-1 items-center text-xl">
-                        <Button @click="demoStore.decrement">- 1</Button> 
+                        <Button @click="demoStore.decrement">- 1</Button>
                         {{ demoStore.count }}
-                        <Button @click="demoStore.increment">+ 1</Button>    
+                        <Button @click="demoStore.increment">+ 1</Button>
                     </div>
-                    
+
                 </div>
                 <div class="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
                     <PlaceholderPattern />
