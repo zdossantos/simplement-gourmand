@@ -7,7 +7,7 @@ interface Props {
     breadcrumbs?: BreadcrumbItemType[];
 }
 
-const props = withDefaults(defineProps<Props>(), {
+withDefaults(defineProps<Props>(), {
     breadcrumbs: () => [],
 });
 
