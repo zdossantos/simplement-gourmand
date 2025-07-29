@@ -136,7 +136,7 @@ const mainNavItems: NavItem[] = [
                         </Button>
                     </div>
 
-                    <DropdownMenu>
+                    <DropdownMenu v-if="auth.user">
                         <DropdownMenuTrigger :as-child="true">
                             <Button
                                 variant="ghost"
@@ -155,6 +155,15 @@ const mainNavItems: NavItem[] = [
                             <UserMenuContent :user="auth.user" />
                         </DropdownMenuContent>
                     </DropdownMenu>
+                    <Button
+                        v-else
+                        as="a"
+                        :href="route('login')"
+                    >
+                        Login
+                    </Button>
+
+
                 </div>
             </div>
         </div>
