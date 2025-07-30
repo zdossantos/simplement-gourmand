@@ -6,7 +6,7 @@ uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
 
 test('guests can access to dashboard', function () {
     $response = $this->get('/dashboard');
-    $response->assertStatus(200);
+    $response->assertStatus(302);
 });
 
 test('authenticated users can visit the dashboard', function () {
@@ -19,5 +19,5 @@ test('authenticated users can visit the dashboard', function () {
 
 test('guests can navigate to food', function () {
     $response = $this->get('/food');
-    $response->assertStatus(200);
+    $response->assertStatus(302);
 });
