@@ -9,13 +9,12 @@ use Illuminate\Database\Eloquent\Collection;
 
 class FridgeService
 {
-    public function updateUserFood(User $user, int $foodId, array $data): FridgeFood
+    public function updateUserFood(User $user, int $foodId, $quantity): FridgeFood
     {
         $food = $user->fridgeFood()->findOrFail($foodId);
-        $allowedFields = ['quantity', 'unit'];
-        $filteredData = array_intersect_key($data, array_flip($allowedFields));
-        
-        $food->update($filteredData);
+        $food->update([
+            'quantity' => $quantity
+        ]);
         return $food->fresh();
     }
 
@@ -25,12 +24,7 @@ class FridgeService
         return $food->delete();
     }
 
-    public function addUserFood(User $user, array $data): FridgeFood
-    {
-        return $user->fridgeFood()->create($data);
-    }
-
-    public function addUserFoodFromDTO(User $user, FoodDTO $foodDTO): FridgeFood
+    public function addUserFood(User $user, FoodDTO $foodDTO): FridgeFood
     {
         return $user->fridgeFood()->create($foodDTO->toFridgeArray());
     }

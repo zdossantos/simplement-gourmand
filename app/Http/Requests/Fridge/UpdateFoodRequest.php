@@ -14,8 +14,7 @@ class UpdateFoodRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'quantity' => 'required|numeric|min:0|max:9999',
-            'unit' => ['nullable', 'string', 'max:50'],
+            'quantity' => 'required|numeric|min:0'
         ];
     }
 
@@ -25,9 +24,6 @@ class UpdateFoodRequest extends FormRequest
             'quantity.required' => 'La quantité est obligatoire.',
             'quantity.numeric' => 'La quantité doit être un nombre.',
             'quantity.min' => 'La quantité ne peut pas être négative.',
-            'quantity.max' => 'La quantité ne peut pas dépasser 9999.',
-            'unit.max' => 'L\'unité ne peut pas dépasser 50 caractères.',
-            'unit.in' => 'L\'unité doit être une valeur valide.',
         ];
     }
 } 
