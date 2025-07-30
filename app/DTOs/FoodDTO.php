@@ -15,13 +15,13 @@ class FoodDTO extends Data
         public ?string $brands = null,
         public ?string $nutriscore_grade = null,
         public ?string $image = null,
-        public bool $hasImage = false,
+        public bool $has_image = false,
         public ?float $quantity = null,
         public ?string $unit = null,
         public ?int $fridge_id = null,
         public ?int $user_id = null,
     ) {
-        $this->hasImage = !empty($this->image);
+        $this->has_image = !empty($this->image);
         $this->unit = $this->unit ?? 'pièce';
     }
 

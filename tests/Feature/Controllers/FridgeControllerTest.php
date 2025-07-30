@@ -76,10 +76,6 @@ class FridgeControllerTest extends TestCase
         ]);
 
         $data = [
-            'openfoodfacts_id' => 123,
-            'name' => 'Dark Chocolate',
-            'image' => 'http://example.com/chocolate.jpg',
-            'unit' => 'kg',
             'quantity' => 100,
         ];
 
@@ -92,7 +88,7 @@ class FridgeControllerTest extends TestCase
             'openfoodfacts_id' => '123',
             'name' => 'Dark Chocolate',
             'image' => 'http://example.com/chocolate.jpg',
-            'unit' => 'kg',
+            'unit' => 'g',
             'quantity' => 100,
         ]);
     }

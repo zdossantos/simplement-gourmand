@@ -17,9 +17,6 @@ Route::get('dashboard', function () {
 })->name('dashboard');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('dashboard', function () {
-        return Inertia::render('Dashboard');
-    })->name('dashboard');
     Route::get('/food', [FoodController::class, 'index'])->name('food.index');
 
     Route::middleware(['auth', 'verified'])->prefix('auth')->name('auth.')->group(function () {
@@ -27,11 +24,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
     Route::get('/fridge', [FridgeController::class, 'index'])->name('fridge.index');
-    Route::post('/fridge/addFood', [FridgeController::class, 'addFood'])->name('fridge.addFood');
-    Route::put('/fridge/updateFood/{id}', [FridgeController::class, 'updateFood'])->name('fridge.updateFood');
-    Route::delete('/fridge/deleteFood/{id}', [FridgeController::class, 'deleteFood'])->name('fridge.deleteFood');
+    Route::group(['prefix' => 'fridge'], function () {
+        Route::post('/addFood', [FridgeController::class, 'addFood'])->name('fridge.addFood');
+        Route::put('/updateFood/{food}', [FridgeController::class, 'updateFood'])->name('fridge.updateFood');
+        Route::delete('/deleteFood/{food}', [FridgeController::class, 'deleteFood'])->name('fridge.deleteFood');
+    });
 });
-
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

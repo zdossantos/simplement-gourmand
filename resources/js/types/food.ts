@@ -5,7 +5,7 @@ export interface Food {
     brands?: string | null
     nutriscore_grade?: string | null
     image?: string | null
-    hasImage: boolean
+    has_image: boolean
     quantity?: number | null
     unit?: string | null
     fridge_id?: number | null

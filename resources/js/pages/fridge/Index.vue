@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { type AppPageProps, type BreadcrumbItem } from '@/types';
-import AppSidebarLayout from '@/layouts/app/AppSidebarLayout.vue';
 import { Head, usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';
 import Card from '@/components/ui/card/Card.vue';
 import CardContent from '@/components/ui/card/CardContent.vue';
 import FoodCard from '@/components/food/FoodCard.vue';
 import type { Food } from '@/types/food';
+import AppLayout from '@/layouts/AppLayout.vue';
+
 
 interface FridgePageProps extends AppPageProps {
   food: Food[]
@@ -32,7 +33,7 @@ const food = computed(() => page.props.food || [])
 <template>
     <Head title="Recherche de produits" />
 
-    <AppSidebarLayout :breadcrumbs="breadcrumbs">
+    <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex h-full flex-1 flex-col gap-6 rounded-xl p-4 overflow-x-auto">
 
                 <div v-if="food.length > 0" class="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -51,5 +52,5 @@ const food = computed(() => page.props.food || [])
                     </CardContent>
                 </Card>
             </div>
-    </AppSidebarLayout>
+    </AppLayout>
 </template>

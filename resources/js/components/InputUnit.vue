@@ -19,8 +19,7 @@ const displayValue = computed({
 			quantity.value = undefined;
 			return;
 		}
-		
-		// Convertir virgule en point et limiter à 2 décimales
+
 		let numStr = value.replace(',', '.');
 		const parts = numStr.split('.');
 		if (parts[1] && parts[1].length > 2) {
@@ -35,8 +34,7 @@ const displayValue = computed({
 const handleInput = (event: Event) => {
 	const target = event.target as HTMLInputElement;
 	let value = target.value.replace('.', ',');
-	
-	// Bloquer si format invalide (max 2 décimales)
+
 	if (!/^\d*,?\d{0,2}$/.test(value)) {
 		target.value = displayValue.value;
 		return;

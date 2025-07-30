@@ -34,7 +34,7 @@ const { addFood, updateFood, deleteFood, isLoading } = useFridge();
 			<CardContent class="p-0 flex flex-col h-full">
 				<div class="relative w-full h-40 flex items-center justify-center overflow-hidden">
 					<img
-						v-if="food.hasImage"
+						v-if="food.has_image"
 						:src="food.image!"
 						:alt="food.name"
 						loading="lazy"

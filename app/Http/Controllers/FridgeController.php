@@ -8,6 +8,8 @@ use Inertia\Response;
 use App\Http\Requests\Fridge\UpdateFoodRequest;
 use App\Services\FridgeService;
 use Illuminate\Http\RedirectResponse;
+use App\DTOs\FoodDTO;
+use App\Models\FridgeFood;
 
 class FridgeController extends Controller
 {
@@ -27,13 +29,15 @@ class FridgeController extends Controller
     public function addFood(AddFoodRequest $request): RedirectResponse
     {
         try {
-            $this->fridgeService->addUserFood(auth()->user(), [
-                'openfoodfacts_id' => $request->validated('openfoodfacts_id'),
-                'name' => $request->validated('name'),
-                'image' => $request->validated('image'),
-                'quantity' => $request->validated('quantity') ?? 1,
-                'unit' => $request->validated('unit') ?? 'pièce',
-            ]);
+            $food = new FoodDTO(
+                openfoodfacts_id: $request->validated('openfoodfacts_id'),
+                name: $request->validated('name'),
+                image: $request->validated('image'),
+                quantity: $request->validated('quantity'),
+                unit: $request->validated('unit'),
+            );
+
+            $this->fridgeService->addUserFood(auth()->user(), $food);
 
             return back()->with('success', 'Aliment ajouté au frigo avec succès !');
 
@@ -42,14 +46,10 @@ class FridgeController extends Controller
         }
     }
 
-    public function updateFood(UpdateFoodRequest $request, int $id): RedirectResponse
+    public function updateFood(UpdateFoodRequest $request, FridgeFood $food): RedirectResponse
     {
         try {
-            $this->fridgeService->updateUserFood(
-                auth()->user(), 
-                $id, 
-                $request->validated()
-            );
+            $this->fridgeService->updateUserFood(auth()->user(), $food->id, $request->validated('quantity'));
 
             return back()->with('success', 'Aliment mis à jour avec succès !');
             
@@ -58,10 +58,10 @@ class FridgeController extends Controller
         }
     }
 
-    public function deleteFood(int $id): RedirectResponse
+    public function deleteFood(FridgeFood $food): RedirectResponse
     {
         try {
-            $this->fridgeService->deleteUserFood(auth()->user(), $id);
+            $this->fridgeService->deleteUserFood(auth()->user(), $food->id);
 
             return back()->with('success', 'Aliment retiré du frigo avec succès !');
             
