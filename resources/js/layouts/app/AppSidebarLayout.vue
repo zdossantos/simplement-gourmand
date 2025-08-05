@@ -1,12 +1,13 @@
+
 <script setup lang="ts">
 import AppContent from '@/components/AppContent.vue';
 import AppShell from '@/components/AppShell.vue';
-import AppSidebar from '@/components/AppSidebar.vue';
-import AppSidebarHeader from '@/components/AppSidebarHeader.vue';
 import type { BreadcrumbItemType } from '@/types';
+import AppNavBar from '@/components/AppNavBar.vue';
 
 interface Props {
     breadcrumbs?: BreadcrumbItemType[];
+    auth?: Object;
 }
 
 withDefaults(defineProps<Props>(), {
@@ -15,10 +16,9 @@ withDefaults(defineProps<Props>(), {
 </script>
 
 <template>
-    <AppShell variant="sidebar">
-        <AppSidebar />
-        <AppContent variant="sidebar" class="overflow-x-hidden">
-            <AppSidebarHeader :breadcrumbs="breadcrumbs" />
+    <AppShell variant="header">
+        <AppNavBar :auth="auth" />
+        <AppContent class="overflow-x-hidden container mx-auto w-full px-4 sm:px-6 lg:px-8 max-w-full sm:max-w-[540px] md:max-w-[720px] lg:max-w-[960px] xl:max-w-[1400px]">
             <slot />
         </AppContent>
     </AppShell>

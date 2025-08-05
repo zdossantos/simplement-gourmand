@@ -4,9 +4,9 @@ use App\Models\User;
 
 uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
 
-test('guests are redirected to the login page', function () {
+test('guests can access to dashboard', function () {
     $response = $this->get('/dashboard');
-    $response->assertRedirect('/login');
+    $response->assertStatus(200);
 });
 
 test('authenticated users can visit the dashboard', function () {
@@ -15,4 +15,9 @@ test('authenticated users can visit the dashboard', function () {
 
     $response = $this->get('/dashboard');
     $response->assertStatus(200);
+});
+
+test('guests can navigate to food', function () {
+    $response = $this->get('/food');
+    $response->assertStatus(302);
 });
