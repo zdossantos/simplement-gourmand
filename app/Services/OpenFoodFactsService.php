@@ -68,7 +68,7 @@ class OpenFoodFactsService
             'search_simple' => 1,
             'action' => 'process',
             'json' => 1,
-            'fields' => 'id,code,product_name,image_url,image_front_url,image_front_small_url,brands,nutriscore_grade'
+            'fields' => 'id,code,product_name,image_url,image_front_url,image_front_small_url,brands,nutriscore_grade,product_quantity,product_quantity_unit'
         ];
 
         return $this->searchWithUrl($criteria, $page, $pageSize);

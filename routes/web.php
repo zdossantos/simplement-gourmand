@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\FoodController;
+use App\Http\Controllers\FridgeController;
 
 Route::get('/', function () {
     return Inertia::render('Dashboard');
@@ -22,6 +23,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/profile', [AuthController::class, 'profile'])->name('profile');
     });
 
+    Route::get('/fridge', [FridgeController::class, 'index'])->name('fridge.index');
+    Route::group(['prefix' => 'fridge'], function () {
+        Route::post('/addFood', [FridgeController::class, 'addFood'])->name('fridge.addFood');
+        Route::put('/updateFood/{food}', [FridgeController::class, 'updateFood'])->name('fridge.updateFood');
+        Route::delete('/deleteFood/{food}', [FridgeController::class, 'deleteFood'])->name('fridge.deleteFood');
+    });
 });
 
 require __DIR__.'/settings.php';

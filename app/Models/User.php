@@ -8,6 +8,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\Contracts\OAuthenticatable;
 use Laravel\Passport\HasApiTokens;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\FridgeFood;
 
 class User extends Authenticatable implements OAuthenticatable
 {
@@ -46,5 +48,10 @@ class User extends Authenticatable implements OAuthenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function fridgeFood(): HasMany
+    {
+        return $this->hasMany(FridgeFood::class);
     }
 }

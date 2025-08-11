@@ -7,21 +7,16 @@ import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { NavigationMenu, NavigationMenuItem, NavigationMenuList, navigationMenuTriggerStyle } from '@/components/ui/navigation-menu';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import UserMenuContent from '@/components/UserMenuContent.vue';
 import { getInitials } from '@/composables/useInitials';
 import type { BreadcrumbItem, NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/vue3';
 import {
-    Apple,
-    BookOpen,
-    CookieIcon, CookingPot,
-    CookingPotIcon,
-    Folder,
+    Apple, CookingPot,
     LayoutGrid,
     Menu,
     Newspaper,
-    Receipt, Refrigerator, RefrigeratorIcon,
+    Refrigerator,
     Search
 } from 'lucide-vue-next';
 import { computed } from 'vue';
@@ -56,7 +51,7 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Mon frigo',
-        href: '',
+        href: '/fridge',
         icon: Refrigerator,
     },
     {

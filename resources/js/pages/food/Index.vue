@@ -11,24 +11,19 @@ import CardDescription from '@/components/ui/card/CardDescription.vue';
 import CardHeader from '@/components/ui/card/CardHeader.vue';
 import CardTitle from '@/components/ui/card/CardTitle.vue';
 import Skeleton from '@/components/ui/skeleton/Skeleton.vue';
-import { Search, Package, X, Apple } from 'lucide-vue-next';
+import { Search, Package, X } from 'lucide-vue-next';
+import FoodCard from '@/components/food/FoodCard.vue';
+import type { Food } from '@/types/food';
 
-interface FoodProduct {
-  id: string | null
-  name: string
-  image?: string
-  hasImage?: boolean
-}
-
-
-interface ProductsPageProps extends AppPageProps {
-  products: FoodProduct[]
+interface FoodSearchPageProps extends AppPageProps {
+  foods: Food[]
   search: string
   count: number
+  error?: string
 }
 
-const page = usePage<ProductsPageProps>()
-const products = computed(() => page.props.products || [])
+const page = usePage<FoodSearchPageProps>()
+const foods = computed(() => page.props.foods || [])
 const search = computed(() => page.props.search || '')
 const count = computed(() => page.props.count || 0)
 
@@ -98,29 +93,8 @@ onMounted(() => {
                     </Card>
                 </div>
 
-                <div v-else-if="products.length > 0" class="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                    <Card v-for="product in products" :key="product.id || product.name" class="overflow-hidden hover:shadow-md transition-shadow">
-                        <CardContent class="p-0">
-                            <div class="aspect-square bg-gray-100 flex items-center justify-center">
-                                <img
-                                    v-if="product.hasImage"
-                                    :src="product.image"
-                                    :alt="product.name"
-                                    class="w-full h-full object-cover"
-                                    loading="lazy"
-                                />
-                                <Apple v-else class="h-12 w-12 text-gray-400" />
-                            </div>
-                            <div class="p-4">
-                                <h3 class="font-medium text-sm line-clamp-2 min-h-[2.5rem]">
-                                    {{ product.name || 'Nom non disponible' }}
-                                </h3>
-                                <p v-if="product.id" class="text-xs text-muted-foreground mt-1">
-                                    ID: {{ product.id }}
-                                </p>
-                            </div>
-                        </CardContent>
-                    </Card>
+                <div v-else-if="foods.length > 0" class="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                    <FoodCard v-for="food in foods" :key="food.openfoodfacts_id || food.name" :food="food" />
                 </div>
 
                 <Card v-else-if="!isLoading && search">
